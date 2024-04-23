@@ -5,6 +5,7 @@ import CardDataStats from "../CardDataStats";
 import { ISnapshotMover } from "@/types/fugle";
 import MoversTable from "../Movers/MoversTable";
 import Link from "next/link";
+import useStalkerStocksLocalStorage from "@/hooks/useStalkerStocksLocalStorage";
 
 interface IECommerceProps {
   snapshotMovers: ISnapshotMover[];
@@ -12,12 +13,19 @@ interface IECommerceProps {
 
 const ECommerce = (props: IECommerceProps) => {
   const { snapshotMovers } = props;
-  const top12SnapshotMovers = snapshotMovers.slice(0, 1);
+
+  const { stalkerStocks } = useStalkerStocksLocalStorage();
+
+  const filteredSnapshotMovers = snapshotMovers.filter((snapshotMover) => {
+    return stalkerStocks.some(
+      (stalkerStock) => stalkerStock.symbol === snapshotMover.symbol,
+    );
+  });
 
   return (
     <>
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
-        {top12SnapshotMovers.map((snapshotMover) => (
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-3 2xl:gap-7.5">
+        {filteredSnapshotMovers.map((snapshotMover) => (
           <CardDataStats
             key={snapshotMover.symbol}
             title={snapshotMover.name}

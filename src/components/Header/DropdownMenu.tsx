@@ -5,11 +5,6 @@ import { useLocalStorage } from "usehooks-ts";
 
 const solutions = [
   {
-    name: "1分",
-    timeframe: "1",
-    icon: "",
-  },
-  {
     name: "5分",
     timeframe: "5",
     icon: "",

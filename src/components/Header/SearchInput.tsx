@@ -6,13 +6,19 @@ import useSearchTickers from "@/hooks/useSearchTickers";
 import { Menu, Transition } from "@headlessui/react";
 import { useClickAnyWhere, useDebounceCallback } from "usehooks-ts";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import useStalkerStocksLocalStorage from "@/hooks/useStalkerStocksLocalStorage";
 
 const SearchInput = () => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const q = searchParams.get("q");
+
+  const [input, setInput] = useState(q || "");
+
   const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  const { onAddStalkerStocks } = useStalkerStocksLocalStorage();
 
   const searchTickers = useSearchTickers();
 
@@ -32,8 +38,12 @@ const SearchInput = () => {
     <div className="relative">
       <Menu>
         <input
+          value={input}
           autoFocus
-          onChange={debounced}
+          onChange={(e) => {
+            debounced(e);
+            setInput(e.target.value);
+          }}
           type="text"
           placeholder="搜尋股票..."
           className="w-full bg-transparent pl-9 pr-4 font-medium focus:outline-none xl:w-125"
@@ -58,7 +68,7 @@ const SearchInput = () => {
                   {searchTickers?.map((ticker) => (
                     <Menu.Item key={ticker.symbol}>
                       {({ active }) => (
-                        <div className="group relative flex gap-x-6 rounded-lg p-2">
+                        <div className="group relative flex justify-between gap-x-6 rounded-lg p-2">
                           <Link
                             href={`/quote/${ticker.symbol}`}
                             className={`font-semibold  ${
@@ -66,8 +76,30 @@ const SearchInput = () => {
                             }`}
                           >
                             {ticker.name} ({ticker.symbol})
-                            <span className="absolute inset-0" />
                           </Link>
+
+                          <span
+                            onClick={() => {
+                              onAddStalkerStocks(ticker);
+                              router.push("/");
+                              setInput("");
+                            }}
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="h-6 w-6 cursor-pointer"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                              />
+                            </svg>
+                          </span>
                         </div>
                       )}
                     </Menu.Item>

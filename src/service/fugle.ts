@@ -29,7 +29,7 @@ export const getSnapshotMovers = async ({
 }:
   | undefined
   | {
-      direction?: "up" | "down";
+      direction?: string;
     } = {}): Promise<IFugleResponse<ISnapshotMover[]>> => {
   const res: IFugleResponse<ISnapshotMover[]> = await FugleApi(
     `/snapshot/movers/TSE?change=percent&direction=${direction}`,

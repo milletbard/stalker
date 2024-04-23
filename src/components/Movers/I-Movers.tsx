@@ -6,15 +6,17 @@ import React, { useEffect, useState } from "react";
 import MoversTable from "./MoversTable";
 import Link from "next/link";
 import { useLocalStorage } from "usehooks-ts";
+import { getSnapshotMovers } from "@/service/fugle";
+import { useQuery } from "@tanstack/react-query";
 
-interface IMoversProps {
-  snapshotMovers: IFugleResponse<ISnapshotMover[]>;
-}
-const IMovers = (props: IMoversProps) => {
-  const snapshotMoverData = props.snapshotMovers.data;
-
+const IMovers = () => {
   const [moversPayload, setMoversPayload] = useLocalStorage("movers-payload", {
     direction: "up",
+  });
+
+  const { data: { data: snapshotMoverData = [] } = {}, isFetching } = useQuery({
+    queryKey: [moversPayload.direction],
+    queryFn: () => getSnapshotMovers({ direction: moversPayload.direction }),
   });
 
   const [items, setItems] = useState<ISnapshotMover[]>(
@@ -27,6 +29,12 @@ const IMovers = (props: IMoversProps) => {
       direction: moversPayload.direction === "up" ? "down" : "up",
     });
   };
+
+  useEffect(() => {
+    if (!isFetching) {
+      setItems(snapshotMoverData.slice(0, 10));
+    }
+  }, [isFetching]);
 
   // 模擬無限載入
   useEffect(() => {

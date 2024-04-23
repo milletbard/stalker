@@ -1,8 +1,8 @@
 import useIntradayCandlesFetcher from "@/hooks/useIntradayCandlesFetcher";
+import useStalkerStocksLocalStorage from "@/hooks/useStalkerStocksLocalStorage";
 import dayjs from "dayjs";
 import React, { useMemo } from "react";
 import Chart, { Props } from "react-apexcharts";
-import { useLocalStorage } from "usehooks-ts";
 
 interface CardDataStatsProps {
   title: string;
@@ -22,7 +22,7 @@ const CardDataStats: React.FC<CardDataStatsProps> = ({
   const { data: intradayCandles = [], isFetching } = useIntradayCandlesFetcher({
     symbol,
   });
-
+  const { onRemoveStalkerStocks } = useStalkerStocksLocalStorage();
   const series = [
     // {
     //   name: "EMA(12)",
@@ -76,17 +76,44 @@ const CardDataStats: React.FC<CardDataStatsProps> = ({
       target="_blank"
       rel="noreferrer noopener nofollow"
     >
-      <div className="relative rounded-md border border-stroke bg-white px-7 py-6 shadow-default transition duration-300 ease-in-out hover:scale-105 dark:border-strokedark dark:bg-boxdark">
+      <div className="relative rounded-md border border-stroke bg-white px-7 py-6 shadow-default transition duration-300 ease-in-out dark:border-strokedark dark:bg-boxdark">
         <span className="absolute right-5 flex h-3 w-3 items-center justify-center self-end">
           <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-yellow-400 opacity-75"></span>
           <span className="relative inline-flex h-3 w-5 rounded-full bg-yellow-500"></span>
         </span>
+
         <div className="flex items-end justify-between">
-          <div>
-            <h4 className="text-title-sm font-normal text-black dark:text-white">
-              {title}
-            </h4>
-            <span className="text-sm font-medium">{symbol}</span>
+          <div className="flex">
+            <span
+              className="cursor-pointer"
+              onClick={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                onRemoveStalkerStocks(symbol);
+              }}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="m-1 h-6 w-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                />
+              </svg>
+            </span>
+
+            <div>
+              <h4 className="flex items-center text-title-sm font-normal text-black dark:text-white">
+                {title}
+              </h4>
+              <span className="text-sm font-medium">{symbol}</span>
+            </div>
           </div>
 
           <span
@@ -130,9 +157,9 @@ const CardDataStats: React.FC<CardDataStatsProps> = ({
         </div>
 
         <div className="">
-          <Chart options={options} series={series} type="line" width="274" />
+          <Chart options={options} series={series} type="line" width="100%" />
         </div>
-      </div>{" "}
+      </div>
     </a>
   );
 };

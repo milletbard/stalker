@@ -1,12 +1,7 @@
 "use client";
 
-import {
-  QueryClient,
-  QueryClientProvider,
-  useQuery,
-} from "@tanstack/react-query";
-import React, { useState, ReactNode } from "react";
-import Sidebar from "@/components/Sidebar";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import React, { useState } from "react";
 import Header from "@/components/Header";
 
 const queryClient = new QueryClient();
