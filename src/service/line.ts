@@ -7,12 +7,16 @@ export const LineApi = ofetch.create({
   },
 });
 
-export const postLineNotify = async (body: FormData) => {
-  await LineApi("/notify", {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
+export const postLineNotify = (message?: string) => {
+  const url =
+    "https://script.google.com/macros/s/AKfycbx9FCHVnzljKFHyGogEKKjOBuGl5g3LCX79iVsxUiYGXiro04K78nSnFqTOMMMuAdQdbA/exec";
+
+  const form = new FormData();
+  form.append("message", message || "");
+  form.append("token", (window as any).linetoken || "");
+
+  fetch(url, {
     method: "POST",
-    body,
+    body: form,
   });
 };

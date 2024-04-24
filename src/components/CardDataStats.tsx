@@ -72,9 +72,11 @@ const CardDataStats: React.FC<CardDataStatsProps> = ({
   };
 
   const onLineNotify = async () => {
-    const form = new FormData();
-    form.append("message", `🚨 ${title}(${symbol}) 通知測試`);
-    await postLineNotify(form);
+    try {
+      postLineNotify(`🚨 ${title}(${symbol}) 通知測試`);
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   return (
