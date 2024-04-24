@@ -1,8 +1,9 @@
+import Chart, { Props } from "react-apexcharts";
+import React from "react";
+import dayjs from "dayjs";
 import useIntradayCandlesFetcher from "@/hooks/useIntradayCandlesFetcher";
 import useStalkerStocksLocalStorage from "@/hooks/useStalkerStocksLocalStorage";
-import dayjs from "dayjs";
-import React, { useMemo } from "react";
-import Chart, { Props } from "react-apexcharts";
+import { postLineNotify } from "@/service/line";
 
 interface CardDataStatsProps {
   title: string;
@@ -19,7 +20,7 @@ const CardDataStats: React.FC<CardDataStatsProps> = ({
   levelUp,
   levelDown,
 }) => {
-  const { data: intradayCandles = [], isFetching } = useIntradayCandlesFetcher({
+  const { data: intradayCandles = [] } = useIntradayCandlesFetcher({
     symbol,
   });
   const { onRemoveStalkerStocks } = useStalkerStocksLocalStorage();
@@ -70,6 +71,12 @@ const CardDataStats: React.FC<CardDataStatsProps> = ({
     },
   };
 
+  const onLineNotify = async () => {
+    const form = new FormData();
+    form.append("message", `🚨 ${title}(${symbol}) 通知測試`);
+    await postLineNotify(form);
+  };
+
   return (
     <a
       href={`${process.env.NEXT_PUBLIC_FUGLE_DOMAIN}/tradingview/${symbol}`}
@@ -77,7 +84,14 @@ const CardDataStats: React.FC<CardDataStatsProps> = ({
       rel="noreferrer noopener nofollow"
     >
       <div className="relative rounded-md border border-stroke bg-white px-7 py-6 shadow-default transition duration-300 ease-in-out dark:border-strokedark dark:bg-boxdark">
-        <span className="absolute right-5 flex h-3 w-3 items-center justify-center self-end">
+        <span
+          className="absolute right-5 flex h-3 w-3 items-center justify-center self-end"
+          onClick={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            onLineNotify();
+          }}
+        >
           <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-yellow-400 opacity-75"></span>
           <span className="relative inline-flex h-3 w-5 rounded-full bg-yellow-500"></span>
         </span>
