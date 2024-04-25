@@ -23,6 +23,7 @@ const CardDataStats: React.FC<CardDataStatsProps> = ({
   const { data: intradayCandles = [] } = useIntradayCandlesFetcher({
     symbol,
   });
+
   const { onRemoveStalkerStocks } = useStalkerStocksLocalStorage();
   const series = [
     // {

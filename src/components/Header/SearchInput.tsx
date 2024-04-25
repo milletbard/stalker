@@ -69,14 +69,19 @@ const SearchInput = () => {
                     <Menu.Item key={ticker.symbol}>
                       {({ active }) => (
                         <div className="group relative flex justify-between gap-x-6 rounded-lg p-2">
-                          <Link
-                            href={`/quote/${ticker.symbol}`}
+                          <a
+                            target="_blank"
+                            rel="noreferrer noopener nofollow"
+                            href={
+                              process.env.NEXT_PUBLIC_FUGLE_DOMAIN +
+                              `/ai/${ticker.symbol}`
+                            }
                             className={`font-semibold  ${
                               active ? "text-gray-3" : "text-gray-1"
                             }`}
                           >
                             {ticker.name} ({ticker.symbol})
-                          </Link>
+                          </a>
 
                           <span
                             onClick={() => {

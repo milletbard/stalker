@@ -51,7 +51,7 @@ export const getSnapshotQuotes = async (): Promise<
   return res;
 };
 
-/** 取得股票價格Ｋ線（依代碼查詢）*/
+/** 取得日內行情股票價格Ｋ線（依代碼查詢）*/
 export const getIntradayCandles = async ({
   symbol,
   timeframe,
@@ -78,6 +78,7 @@ export const getHistoricalCandles = async ({
   timeframe: string;
 }): Promise<IFugleResponse<IHistoricalCandle[]>> => {
   const today = new Date();
+
   const from = new Date(today);
   // 固定查詢過去 14 天的資料
   from.setDate(today.getDate() - 14);
@@ -85,6 +86,7 @@ export const getHistoricalCandles = async ({
   const fromDateFormatted = from.toISOString().split("T")[0];
   // 今天日期轉換為 yyyy-MM-dd 格式
   const todayDateFormatted = today.toISOString().split("T")[0];
+
   const res = await FugleApi(
     `/historical/candles/${symbol}?timeframe=${timeframe}&fields=open,high,low,close,volume&from=${fromDateFormatted}&to=${todayDateFormatted}`,
     {
