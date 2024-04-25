@@ -1,11 +1,10 @@
 "use client";
 
 import React from "react";
-import CardDataStats from "../CardDataStats";
 import { ISnapshotMover } from "@/types/fugle";
 import MoversTable from "../Movers/MoversTable";
 import Link from "next/link";
-import useStalkerStocksLocalStorage from "@/hooks/useStalkerStocksLocalStorage";
+import CardDataStats from "../CardDataStats";
 
 interface IECommerceProps {
   snapshotMovers: ISnapshotMover[];
@@ -16,7 +15,7 @@ const ECommerce = (props: IECommerceProps) => {
 
   return (
     <>
-      <div className="mx-auto max-w-2xl py-32 sm:py-52 lg:py-60">
+      <div className="mx-auto max-w-2xl py-32 sm:py-52 lg:py-48">
         <div className="text-center">
           <h1 className="text-gray-900 text-2xl font-bold tracking-tight sm:text-4xl">
             Mastering MACD: Your Gateway to Profitable Trading Signals
@@ -32,7 +31,7 @@ const ECommerce = (props: IECommerceProps) => {
               href="/single"
               className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             >
-              Get started
+              開始
             </Link>
             <a
               rel="noreferrer noopener nofollow"
@@ -40,27 +39,45 @@ const ECommerce = (props: IECommerceProps) => {
               target="_blank"
               className="text-gray-900 text-sm font-semibold leading-6"
             >
-              Learn more <span aria-hidden="true">→</span>
+              學習 <span aria-hidden="true">→</span>
             </a>
           </div>
         </div>
       </div>
+
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-3 2xl:gap-7.5">
+        {snapshotMovers.slice(0, 3).map((snapshotMover) => {
+          return (
+            <CardDataStats
+              key={snapshotMover.symbol}
+              closePrice={snapshotMover.closePrice}
+              title={snapshotMover.name}
+              symbol={snapshotMover.symbol}
+              rate={`${snapshotMover.change}(${snapshotMover.changePercent})%`}
+              levelUp={snapshotMover.changePercent > 0}
+              hideTransaction
+            />
+          );
+        })}
+      </div>
+
       <div className="mt-4 hidden md:mt-6 md:block 2xl:mt-7.5">
         <MoversTable
-          snapshotMovers={snapshotMovers.slice(0, 5)}
+          hideTradeAction={true}
+          snapshotMovers={snapshotMovers.slice(0, 8)}
           extra={
             <Link href="/movers">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
-                stroke-width="1.5"
+                strokeWidth="1.5"
                 stroke="currentColor"
                 className="h-6 w-6"
               >
                 <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                   d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"
                 />
               </svg>

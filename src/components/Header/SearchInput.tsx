@@ -1,12 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import useSearchTickers from "@/hooks/useSearchTickers";
 import { Menu, Transition } from "@headlessui/react";
 import { useClickAnyWhere, useDebounceCallback } from "usehooks-ts";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import useStalkerStocksLocalStorage from "@/hooks/useStalkerStocksLocalStorage";
+import path from "path";
 
 const SearchInput = () => {
   const router = useRouter();
@@ -34,10 +35,15 @@ const SearchInput = () => {
     setDropdownOpen(false);
   });
 
+  useEffect(() => {
+    setInput("");
+  }, [pathname]);
+
   return (
     <div className="relative">
       <Menu>
         <input
+          id="stock-search-input"
           value={input}
           autoFocus
           onChange={(e) => {

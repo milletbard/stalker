@@ -1,6 +1,6 @@
-import React, { Fragment, useState } from "react";
-import { Menu, Transition } from "@headlessui/react";
 import Link from "next/link";
+import React, { Fragment } from "react";
+import { Menu, Popover, Transition } from "@headlessui/react";
 import { useLocalStorage } from "usehooks-ts";
 
 const solutions = [
@@ -80,6 +80,7 @@ const DropdownMenu = () => {
                     )}
                   </Menu.Item>
                   <hr className="m-2 text-slate-600" />
+
                   {solutions.map((item) => (
                     <Menu.Item key={item.name}>
                       {({ active }) => (

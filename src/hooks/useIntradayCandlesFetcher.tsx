@@ -16,6 +16,15 @@ const useIntradayCandlesFetcher = ({
 }: IIntradayCandlesFetcherProps) => {
   const [kdTimeframe] = useLocalStorage("kd-timeframe", "15");
 
+  // * 是否在早上9點到下午1點半之間
+  const isMarketOpen = useMemo(() => {
+    const now = dayjs();
+    const open = dayjs().set("hour", 9).set("minute", 0);
+    const close = dayjs().set("hour", 13).set("minute", 30);
+
+    return now.isAfter(open) && now.isBefore(close);
+  }, []);
+
   // * 當日資料
   const {
     data: { data: intradayCandles = [] } = {},
@@ -23,7 +32,8 @@ const useIntradayCandlesFetcher = ({
   } = useQuery({
     queryKey: ["/intraday/candles", symbol, kdTimeframe],
     queryFn: () => getIntradayCandles({ symbol, timeframe: kdTimeframe }),
-    refetchInterval: 1000 * 60 * 0.5,
+    // * 開盤後每4分鐘重新取得資料
+    refetchInterval: isMarketOpen && 1000 * 60 * 4,
   });
 
   // * 歷史行情不包含當日資料，排序為新到舊
@@ -36,14 +46,18 @@ const useIntradayCandlesFetcher = ({
   });
 
   const loading = isIntradayCandlesFetching || isHistoricalCandlesFetching;
+
   // * 一併改為新到舊
   const reverseIntradayCandles = [...intradayCandles].reverse();
 
   const filteredData = useMemo(() => {
     if (loading) return [];
 
-    // * 合併當日與歷史資料
-    const allCandles = [...reverseIntradayCandles, ...historicalCandles];
+    // * 合併當日與歷史資料，當收盤後只顯示歷史資料
+    const allCandles = isMarketOpen
+      ? [...reverseIntradayCandles, ...historicalCandles]
+      : historicalCandles;
+
     const dates = new Set(
       allCandles.map((item) => dayjs(item.date).format("YYYY-MM-DD")),
     );
@@ -89,6 +103,7 @@ const useIntradayCandlesFetcher = ({
   return {
     data: filteredData,
     isFetching: loading,
+    isMarketOpen,
   };
 };
 
