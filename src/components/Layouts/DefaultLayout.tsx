@@ -1,7 +1,10 @@
 "use client";
-import React, { useState, ReactNode } from "react";
-import Sidebar from "@/components/Sidebar";
+
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import React, { useState } from "react";
 import Header from "@/components/Header";
+
+const queryClient = new QueryClient();
 
 export default function DefaultLayout({
   children,
@@ -11,11 +14,11 @@ export default function DefaultLayout({
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <>
+    <QueryClientProvider client={queryClient}>
       {/* <!-- ===== Page Wrapper Start ===== --> */}
-      <div className="flex h-screen overflow-hidden">
+      <div className="flex h-screen overflow-hidden ">
         {/* <!-- ===== Sidebar Start ===== --> */}
-        <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+        {/* <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} /> */}
         {/* <!-- ===== Sidebar End ===== --> */}
 
         {/* <!-- ===== Content Area Start ===== --> */}
@@ -26,7 +29,7 @@ export default function DefaultLayout({
 
           {/* <!-- ===== Main Content Start ===== --> */}
           <main>
-            <div className="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
+            <div className="mx-auto max-w-screen-2xl md:p-6 2xl:p-10">
               {children}
             </div>
           </main>
@@ -34,7 +37,8 @@ export default function DefaultLayout({
         </div>
         {/* <!-- ===== Content Area End ===== --> */}
       </div>
+
       {/* <!-- ===== Page Wrapper End ===== --> */}
-    </>
+    </QueryClientProvider>
   );
 }
