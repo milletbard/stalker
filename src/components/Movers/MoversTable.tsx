@@ -66,7 +66,10 @@ const MoversTable = ({ snapshotMovers, extra }: IMoversTableProps) => {
                 <span
                   className="cursor-pointer"
                   onClick={() => {
-                    onRemoveStalkerStocks(brand.symbol);
+                    onRemoveStalkerStocks({
+                      symbol: brand.symbol,
+                      name: brand.name,
+                    });
                   }}
                 >
                   <svg

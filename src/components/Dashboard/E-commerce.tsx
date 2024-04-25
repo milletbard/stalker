@@ -16,7 +16,7 @@ const ECommerce = (props: IECommerceProps) => {
 
   return (
     <>
-      <div className="mx-auto max-w-2xl py-32 sm:py-48 lg:py-60">
+      <div className="mx-auto max-w-2xl py-32 sm:py-52 lg:py-60">
         <div className="text-center">
           <h1 className="text-gray-900 text-2xl font-bold tracking-tight sm:text-4xl">
             Mastering MACD: Your Gateway to Profitable Trading Signals

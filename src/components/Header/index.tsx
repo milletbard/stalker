@@ -56,6 +56,14 @@ const Header = (props: {
 
         <div className="flex items-center gap-3 2xsm:gap-7">
           <ul className="flex items-center gap-2 2xsm:gap-4">
+            <li>
+              <Link
+                className="text-gray-900 text-md dark:text-gray-1 font-semibold"
+                href="/single"
+              >
+                訊號源
+              </Link>
+            </li>
             <DropdownMenu />
             {/* <!-- Notification Menu Area --> */}
 

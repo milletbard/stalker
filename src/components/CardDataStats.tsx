@@ -106,7 +106,7 @@ const CardDataStats: React.FC<CardDataStatsProps> = ({
               onClick={(e) => {
                 e.stopPropagation();
                 e.preventDefault();
-                onRemoveStalkerStocks(symbol);
+                onRemoveStalkerStocks({ symbol, name: title });
               }}
             >
               <svg
