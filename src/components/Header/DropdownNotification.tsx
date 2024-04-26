@@ -11,7 +11,6 @@ const DropdownNotification = () => {
     {},
   );
 
-  console.log(candlesNotificationSession);
   const trigger = useRef<any>(null);
   const dropdown = useRef<any>(null);
 
