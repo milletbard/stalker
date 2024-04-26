@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { useSessionStorage } from "usehooks-ts";
+import { useDebounceCallback, useSessionStorage } from "usehooks-ts";
 
 const DropdownNotification = () => {
   const [candlesNotificationSession] = useSessionStorage(
@@ -8,6 +8,12 @@ const DropdownNotification = () => {
     {},
   );
 
+  const [lineTokenSession, setLineTokenSession] = useSessionStorage(
+    "line-token",
+    { lineToken: "" },
+  );
+
+  const [input, setInput] = useState(lineTokenSession.lineToken);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [notifying, setNotifying] = useState(
     Object.keys(candlesNotificationSession).length > 0,
@@ -34,12 +40,18 @@ const DropdownNotification = () => {
   // close if the esc key is pressed
   useEffect(() => {
     const keyHandler = ({ keyCode }: KeyboardEvent) => {
-      if (!dropdownOpen || keyCode !== 27) return;
+      if (!dropdownOpen || (keyCode !== 27 && keyCode !== 13)) return;
       setDropdownOpen(false);
     };
     document.addEventListener("keydown", keyHandler);
     return () => document.removeEventListener("keydown", keyHandler);
   });
+
+  const onInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setLineTokenSession({ lineToken: e.target.value });
+  };
+
+  const debounced = useDebounceCallback(onInput, 300);
 
   return (
     <li className="relative">
@@ -83,8 +95,27 @@ const DropdownNotification = () => {
           dropdownOpen === true ? "block" : "hidden"
         }`}
       >
-        <div className="px-4.5 py-3">
-          <h5 className="text-sm font-medium text-bodydark2">推播通知</h5>
+        <div className="flex items-center justify-between  gap-2 truncate px-4.5 py-3 text-sm font-medium">
+          <h5 className="text-bodydark1">推播通知</h5>
+
+          {dropdownOpen && (
+            <div className="flex h-8 items-center rounded-lg border  border-graydark">
+              <input
+                prefix="line"
+                value={input}
+                autoComplete="off"
+                autoFocus
+                defaultValue={lineTokenSession.lineToken}
+                onChange={(e) => {
+                  debounced(e);
+                  setInput(e.target.value);
+                }}
+                type="text"
+                placeholder="line notify token"
+                className="bg-transparent pl-4 pr-4 text-sm focus:outline-none"
+              />
+            </div>
+          )}
         </div>
 
         <ul className="flex h-auto flex-col overflow-y-auto">

@@ -7,13 +7,15 @@ export const LineApi = ofetch.create({
   },
 });
 
-export const postLineNotify = (message?: string) => {
+export const postLineNotify = (token: string, message?: string) => {
   const url =
     "https://script.google.com/macros/s/AKfycbx9FCHVnzljKFHyGogEKKjOBuGl5g3LCX79iVsxUiYGXiro04K78nSnFqTOMMMuAdQdbA/exec";
 
+  if (!token) return;
+
   const form = new FormData();
+  form.append("token", token);
   form.append("message", message || "");
-  form.append("token", (window as any).linetoken || "");
 
   fetch(url, {
     method: "POST",

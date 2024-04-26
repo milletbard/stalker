@@ -7,7 +7,12 @@ import { useClickAnyWhere, useDebounceCallback } from "usehooks-ts";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import useStalkerStocksLocalStorage from "@/hooks/useStalkerStocksLocalStorage";
 
-const SearchInput = () => {
+interface ISearchInputProps
+  extends React.InputHTMLAttributes<HTMLInputElement> {
+  wrapperClassName?: string;
+}
+
+const SearchInput = ({ wrapperClassName, ...rest }: ISearchInputProps) => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -21,14 +26,6 @@ const SearchInput = () => {
 
   const searchTickers = useSearchTickers();
 
-  const onSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const query = e.target.value;
-    router.replace(`${pathname}?q=${query}`);
-    setDropdownOpen(true);
-  };
-
-  const debounced = useDebounceCallback(onSearch, 200);
-
   useClickAnyWhere(() => {
     setDropdownOpen(false);
   });
@@ -37,8 +34,20 @@ const SearchInput = () => {
     setInput("");
   }, [pathname]);
 
+  const onSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const query = e.target.value;
+    router.replace(`${pathname}?q=${query}`);
+    setDropdownOpen(true);
+  };
+
+  const debounced = useDebounceCallback(onSearch, 200);
+
   return (
-    <div className="relative flex h-12 items-center justify-center rounded-lg border  border-slate-700">
+    <div
+      className={`relative flex h-8 items-center justify-center rounded-lg border  border-graydark
+    ${wrapperClassName || ""}
+    `}
+    >
       <button className="absolute left-2 top-1/2 -translate-y-1/2">
         <svg
           className="fill-body hover:fill-primary dark:fill-bodydark dark:hover:fill-primary"
@@ -66,7 +75,6 @@ const SearchInput = () => {
       <Menu>
         <input
           autoComplete="off"
-          id="stock-search-input"
           value={input}
           autoFocus
           onChange={(e) => {
@@ -76,6 +84,7 @@ const SearchInput = () => {
           type="text"
           placeholder="搜尋股票..."
           className="w-full bg-transparent pl-9 pr-4 font-medium focus:outline-none xl:w-125 "
+          {...rest}
         />
 
         <Transition

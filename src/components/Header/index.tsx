@@ -21,7 +21,7 @@ const Header = (props: {
         </div>
 
         <div className="hidden sm:block">
-          <SearchInput />
+          <SearchInput id="stock-search-input" />
         </div>
 
         <div className="flex items-center gap-3 2xsm:gap-7">
