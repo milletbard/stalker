@@ -4,16 +4,13 @@ import CardDataStats from "../CardDataStats";
 import React, { useEffect, useRef } from "react";
 import SingleEmpty from "./SingleEmpty";
 import useStalkerStocksLocalStorage from "@/hooks/useStalkerStocksLocalStorage";
-import { ISnapshotMover } from "@/types/fugle";
 import { toast } from "react-toastify";
 import { useSessionStorage } from "usehooks-ts";
+import SearchInput from "../Header/SearchInput";
 
-interface ISingleChartsProps {
-  snapshotMovers: ISnapshotMover[];
-}
+interface ISingleChartsProps {}
 
-const SingleCharts = (props: ISingleChartsProps) => {
-  const { snapshotMovers } = props;
+const SingleCharts = () => {
   const mountedRef = useRef(false);
 
   // * 紀錄是否關閉過 toast
@@ -24,13 +21,6 @@ const SingleCharts = (props: ISingleChartsProps) => {
 
   const { stalkerStocks } = useStalkerStocksLocalStorage();
 
-  const filteredSnapshotMovers = snapshotMovers.filter((snapshotMover) => {
-    return stalkerStocks.some(
-      (stalkerStock) => stalkerStock.symbol === snapshotMover.symbol,
-    );
-  });
-
-  //
   const openDocumentToast = () => {
     toast(
       <div className="flex flex-col text-sm">
@@ -152,20 +142,19 @@ const SingleCharts = (props: ISingleChartsProps) => {
     () => (mountedRef.current = false);
   }, []);
 
-  if (filteredSnapshotMovers.length === 0) {
-    return <SingleEmpty openDocumentToast={openDocumentToast} />;
+  if (Object.keys(stalkerStocks).length === 0) {
+    return <SingleEmpty />;
   }
 
   return (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-3 2xl:gap-7.5">
-      {filteredSnapshotMovers.map((snapshotMover) => (
+      {Object.values(stalkerStocks).map((stalkerStock) => (
         <CardDataStats
-          key={snapshotMover.symbol}
-          closePrice={snapshotMover.closePrice}
-          title={snapshotMover.name}
-          symbol={snapshotMover.symbol}
-          rate={`${snapshotMover.change}(${snapshotMover.changePercent})%`}
-          levelUp={snapshotMover.changePercent > 0}
+          key={stalkerStock.symbol}
+          title={stalkerStock?.name || ""}
+          symbol={stalkerStock?.symbol}
+          // rate={`${snapshotMover.change}(${snapshotMover.changePercent})%`}
+          // levelUp={snapshotMover.changePercent > 0}
           option={{
             openInterval: true,
           }}

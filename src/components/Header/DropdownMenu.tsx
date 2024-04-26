@@ -64,6 +64,23 @@ const DropdownMenu = () => {
             <div className="absolute left-1/2 z-10 mt-5 flex w-screen max-w-max -translate-x-1/2 px-4">
               <div className="w-screen max-w-44 flex-auto overflow-hidden rounded-3xl border border-stroke bg-white text-sm leading-6 shadow-default dark:border-strokedark dark:bg-boxdark">
                 <div className="p-4">
+                  <div className="block sm:hidden">
+                    <Menu.Item>
+                      {({ active }) => (
+                        <div className="group relative flex gap-x-6 rounded-lg p-2">
+                          <Link
+                            href="/single"
+                            className={`font-semibold  ${
+                              active ? "text-gray-3" : "text-gray-1"
+                            }`}
+                          >
+                            訊號源
+                            <span className="absolute inset-0" />
+                          </Link>
+                        </div>
+                      )}
+                    </Menu.Item>
+                  </div>
                   <Menu.Item>
                     {({ active }) => (
                       <div className="group relative flex gap-x-6 rounded-lg p-2">

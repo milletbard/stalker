@@ -51,6 +51,66 @@ export interface IntradayCandle {
   average: number;
 }
 
+export interface IntradayQuote {
+  date: string;
+  type: string;
+  exchange: string;
+  market: string;
+  symbol: string;
+  name: string;
+  referencePrice: number;
+  previousClose: number;
+  openPrice: number;
+  openTime: number;
+  highPrice: number;
+  highTime: number;
+  lowPrice: number;
+  lowTime: number;
+  closePrice: number;
+  closeTime: number;
+  avgPrice: number;
+  change: number;
+  changePercent: number;
+  amplitude: number;
+  lastPrice: number;
+  lastSize: number;
+  bids: {
+    price: number;
+    size: number;
+  }[];
+  asks: {
+    price: number;
+    size: number;
+  }[];
+  total: {
+    tradeValue: number;
+    tradeVolume: number;
+    tradeVolumeAtBid: number;
+    tradeVolumeAtAsk: number;
+    transaction: number;
+    time: number;
+  };
+  lastTrade: {
+    bid: number;
+    ask: number;
+    price: number;
+    size: number;
+    time: number;
+    serial: number;
+  };
+  lastTrial: {
+    bid: number;
+    ask: number;
+    price: number;
+    size: number;
+    time: number;
+    serial: number;
+  };
+  isClose: boolean;
+  serial: number;
+  lastUpdated: number;
+}
+
 export interface IHistoricalCandle {
   date: string;
   open: number;

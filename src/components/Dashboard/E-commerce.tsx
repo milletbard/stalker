@@ -50,12 +50,11 @@ const ECommerce = (props: IECommerceProps) => {
           return (
             <CardDataStats
               key={snapshotMover.symbol}
-              closePrice={snapshotMover.closePrice}
+              // closePrice={snapshotMover.closePrice}
               title={snapshotMover.name}
               symbol={snapshotMover.symbol}
-              rate={`${snapshotMover.change}(${snapshotMover.changePercent})%`}
-              levelUp={snapshotMover.changePercent > 0}
-              hideTransaction
+              // rate={`${snapshotMover.change}(${snapshotMover.changePercent})%`}
+              // levelUp={snapshotMover.changePercent > 0}
             />
           );
         })}
