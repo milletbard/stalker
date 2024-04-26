@@ -92,7 +92,7 @@ const CardDataStats: React.FC<CardDataStatsProps> = ({
 
   const [second, first] = takeRight(intradayCandles, 2);
   // * 是否黃金交叉
-  const isGoldCross = !(second?.dif < second?.dea && first?.dif > first?.dea);
+  const isGoldCross = second?.dif < second?.dea && first?.dif > first?.dea;
 
   useInterval(
     () => {
