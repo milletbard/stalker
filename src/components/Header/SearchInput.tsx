@@ -7,7 +7,6 @@ import { Menu, Transition } from "@headlessui/react";
 import { useClickAnyWhere, useDebounceCallback } from "usehooks-ts";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import useStalkerStocksLocalStorage from "@/hooks/useStalkerStocksLocalStorage";
-import path from "path";
 
 const SearchInput = () => {
   const router = useRouter();
@@ -92,7 +91,6 @@ const SearchInput = () => {
                           <span
                             onClick={() => {
                               onAddStalkerStocks(ticker);
-                              router.push("/");
                               setInput("");
                             }}
                           >

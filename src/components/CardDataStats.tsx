@@ -90,16 +90,16 @@ const CardDataStats: React.FC<CardDataStatsProps> = ({
     }
   };
 
+  const [second, first] = takeRight(intradayCandles, 2);
+  // * 是否黃金交叉
+  const isGoldCross = !(second?.dif < second?.dea && first?.dif > first?.dea);
+
   useInterval(
     () => {
-      const [second, first] = takeRight(intradayCandles, 2);
-
       const time = dayjs(first.date).format("HH:mm:ss");
       const close = first.close;
 
-      const isGoldCross = second.dif < second.dea && first.dif > first.dea;
-
-      if (!isGoldCross) {
+      if (isGoldCross) {
         // * 判斷是否已經通知過
         if (has(candlesNotificationSession, time)) {
           return;
@@ -142,8 +142,16 @@ const CardDataStats: React.FC<CardDataStatsProps> = ({
             onLineNotify(`🚨 ${title}(${symbol}) 通知測試`);
           }}
         >
-          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-yellow-400 opacity-75"></span>
-          <span className="relative inline-flex h-3 w-5 rounded-full bg-yellow-500"></span>
+          <span
+            className={`rounded-ful absolute inline-flex h-full w-full animate-ping opacity-0
+           ${isGoldCross ? "bg-rose-400" : "bg-yellow-400"}
+          `}
+          ></span>
+          <span
+            className={`relative inline-flex h-3 w-5 rounded-full 
+          ${isGoldCross ? "bg-rose-600" : "bg-yellow-500"}
+          `}
+          ></span>
         </span>
 
         <div className="flex items-end justify-between">
