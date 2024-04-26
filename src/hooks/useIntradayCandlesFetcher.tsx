@@ -33,7 +33,7 @@ const useIntradayCandlesFetcher = ({
     queryKey: ["/intraday/candles", symbol, kdTimeframe],
     queryFn: () => getIntradayCandles({ symbol, timeframe: kdTimeframe }),
     // * 開盤後每4分鐘重新取得資料
-    refetchInterval: isMarketOpen && 1000 * 60 * 4,
+    refetchInterval: isMarketOpen && 1000 * 60 * 1,
   });
 
   // * 歷史行情不包含當日資料，排序為新到舊
