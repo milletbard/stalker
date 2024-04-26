@@ -3,12 +3,14 @@ import Link from "next/link";
 import { useSessionStorage } from "usehooks-ts";
 
 const DropdownNotification = () => {
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [notifying, setNotifying] = useState(true);
-
   const [candlesNotificationSession] = useSessionStorage(
     "candlesNotification",
     {},
+  );
+
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [notifying, setNotifying] = useState(
+    Object.keys(candlesNotificationSession).length > 0,
   );
 
   const trigger = useRef<any>(null);
@@ -86,6 +88,18 @@ const DropdownNotification = () => {
         </div>
 
         <ul className="flex h-auto flex-col overflow-y-auto">
+          {Object.keys(candlesNotificationSession).length === 0 && (
+            <li>
+              <span className="flex flex-col gap-2.5 border-t border-stroke px-4.5 py-3 hover:bg-gray-2 dark:border-strokedark dark:hover:bg-meta-4">
+                <p className="flex justify-center text-sm">
+                  <span className="text-black dark:text-white">
+                    暫時沒有訊號
+                  </span>
+                </p>
+              </span>
+            </li>
+          )}
+
           {Object.values(candlesNotificationSession).map((item: any) => {
             const text = `${item?.kdTimeframe} 分 K 黃金交叉通知: ${item?.title}(${item?.symbol}) 股價: ${item?.close}`;
 

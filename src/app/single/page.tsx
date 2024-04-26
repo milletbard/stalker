@@ -4,11 +4,9 @@ import { getSnapshotMovers } from "@/service/fugle";
 import React from "react";
 
 export default async function Single() {
-  const snapshotMovers = await getSnapshotMovers();
-
   return (
     <DefaultLayout>
-      <SingleCharts snapshotMovers={snapshotMovers.data} />
+      <SingleCharts />
     </DefaultLayout>
   );
 }
