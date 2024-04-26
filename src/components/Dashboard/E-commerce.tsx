@@ -15,8 +15,6 @@ interface IECommerceProps {
 const ECommerce = (props: IECommerceProps) => {
   const { snapshotMovers } = props;
 
-  const mountedRef = useRef(false);
-
   // * 紀錄是否關閉過 toast
   const [stalkerStocksToast, setStalkerStocksToast] = useSessionStorage(
     "stalkerStocksToast",
@@ -137,11 +135,9 @@ const ECommerce = (props: IECommerceProps) => {
     };
 
     // * 顯示 toast，提醒使用者如何使用 Stalker
-    if (mountedRef.current && !stalkerStocksToast.closed) {
+    if (!stalkerStocksToast.closed) {
       openDocumentToast();
     }
-    mountedRef.current = true;
-    () => (mountedRef.current = false);
   }, [setStalkerStocksToast, stalkerStocksToast.closed]);
 
   return (
