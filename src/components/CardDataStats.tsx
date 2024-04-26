@@ -124,7 +124,7 @@ const CardDataStats: React.FC<CardDataStatsProps> = ({
     },
 
     // * 4 分鐘更新一次
-    isMarketOpen && option?.openInterval ? 1000 * 60 * 4 : null,
+    isMarketOpen && option?.openInterval ? 1000 * 60 * 1 : null,
   );
 
   return (
