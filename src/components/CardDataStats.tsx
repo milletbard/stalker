@@ -5,38 +5,39 @@ import React from "react";
 import dayjs from "dayjs";
 import useIntradayCandlesFetcher from "@/hooks/useIntradayCandlesFetcher";
 import useStalkerStocksLocalStorage from "@/hooks/useStalkerStocksLocalStorage";
+import { getIntradayQuote } from "@/service/fugle";
+import { has, takeRight } from "lodash-es";
 import { postLineNotify } from "@/service/line";
 import { useInterval, useLocalStorage, useSessionStorage } from "usehooks-ts";
-import { has, takeRight } from "lodash-es";
+import { useQuery } from "@tanstack/react-query";
 
 interface CardDataStatsProps {
-  closePrice: number;
   title: string;
   symbol: string;
-  rate: string;
-  levelUp?: boolean;
-  levelDown?: boolean;
-  hideTransaction?: boolean;
   option?: {
     openInterval?: boolean;
+    hideAction?: boolean;
   };
 }
 
 const CardDataStats: React.FC<CardDataStatsProps> = ({
-  closePrice,
   title,
   symbol,
-  rate,
-  levelUp,
-  levelDown,
-  hideTransaction = false,
   option,
 }) => {
   const [kdTimeframe] = useLocalStorage("kd-timeframe", "15");
+
   const { data: intradayCandles = [], isMarketOpen } =
     useIntradayCandlesFetcher({
       symbol,
     });
+
+  const { data: intradayQuote } = useQuery({
+    queryKey: ["/intraday/quote", symbol],
+    queryFn: () => getIntradayQuote({ symbol }),
+    // * 開盤後每1分鐘重新取得資料
+    refetchInterval: !isMarketOpen && option?.openInterval ? 1000 * 60 * 1 : 0,
+  });
 
   const [candlesNotificationSession, setCandlesNotificationSession] =
     useSessionStorage("candlesNotification", {});
@@ -124,8 +125,10 @@ const CardDataStats: React.FC<CardDataStatsProps> = ({
     },
 
     // * 4 分鐘更新一次
-    isMarketOpen && option?.openInterval ? 1000 * 60 * 1 : null,
+    isMarketOpen && option?.openInterval ? 1000 * 60 * 4 : null,
   );
+
+  const levelUp = (intradayQuote?.changePercent || 0) > 0;
 
   return (
     <a
@@ -134,29 +137,31 @@ const CardDataStats: React.FC<CardDataStatsProps> = ({
       rel="noreferrer noopener nofollow"
     >
       <div className="relative m-8 rounded-md border border-stroke bg-white px-7 py-6 shadow-default transition duration-300 ease-in-out dark:border-strokedark dark:bg-boxdark">
-        <span
-          className="absolute right-5 flex h-3 w-3 items-center justify-center self-end"
-          onClick={(e) => {
-            e.stopPropagation();
-            e.preventDefault();
-            onLineNotify(`🚨 ${title}(${symbol}) 通知測試`);
-          }}
-        >
+        {option?.openInterval && isMarketOpen && (
           <span
-            className={`rounded-ful absolute inline-flex h-full w-full animate-ping opacity-0
+            className="absolute right-5 flex h-3 w-3 items-center justify-center self-end"
+            onClick={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+              onLineNotify(`🚨 ${title}(${symbol}) 通知測試`);
+            }}
+          >
+            <span
+              className={`rounded-ful absolute inline-flex h-full w-full animate-ping opacity-0
            ${isGoldCross ? "bg-rose-400" : "bg-yellow-400"}
           `}
-          ></span>
-          <span
-            className={`relative inline-flex h-3 w-5 rounded-full 
+            ></span>
+            <span
+              className={`relative inline-flex h-3 w-5 rounded-full 
           ${isGoldCross ? "bg-rose-600" : "bg-yellow-500"}
           `}
-          ></span>
-        </span>
+            ></span>
+          </span>
+        )}
 
         <div className="flex items-end justify-between">
           <div className="flex">
-            {!hideTransaction && (
+            {option?.hideAction !== false && (
               <span
                 className="cursor-pointer"
                 onClick={(e) => {
@@ -192,19 +197,17 @@ const CardDataStats: React.FC<CardDataStatsProps> = ({
 
           <div>
             <span
-              className={`text-xl ${
-                levelUp && "text-meta-1"
-              } ${levelDown && "text-meta-3"} `}
+              className={`text-xl ${levelUp ? "text-meta-1" : "text-meta-3"}  `}
             >
-              {closePrice}
+              {intradayQuote?.closePrice || 0}
             </span>
             <span
               className={`flex items-center gap-1 text-sm font-medium ${
-                levelUp && "text-meta-1"
-              } ${levelDown && "text-meta-3"} `}
+                levelUp ? "text-meta-1" : "text-meta-3"
+              }`}
             >
-              {rate}
-              {levelUp && (
+              {intradayQuote?.changePercent || 0}%
+              {levelUp ? (
                 <svg
                   className="fill-meta-1"
                   width="10"
@@ -218,8 +221,7 @@ const CardDataStats: React.FC<CardDataStatsProps> = ({
                     fill=""
                   />
                 </svg>
-              )}
-              {levelDown && (
+              ) : (
                 <svg
                   className="fill-meta-3"
                   width="10"

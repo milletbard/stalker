@@ -4,6 +4,7 @@ import {
   ISnapshotMover,
   IntradayCandle,
   IHistoricalCandle,
+  IntradayQuote,
 } from "@/types/fugle";
 import { FugleApi } from "./baseApi";
 
@@ -36,9 +37,6 @@ export const getSnapshotMovers = async ({
     { method: "GET" },
   );
 
-  //  過濾掉 res.data 中所有 changePercent < 0.8 的資料
-  // const filteredData = res.data.filter((item) => item.changePercent > 0.8);
-
   return { ...res };
 };
 
@@ -47,6 +45,19 @@ export const getSnapshotQuotes = async (): Promise<
   IFugleResponse<ISnapshotQuote[]>
 > => {
   const res = await FugleApi("/snapshot/quotes/TSE", { method: "GET" });
+
+  return res;
+};
+
+/** 取得股票即時報價（依代碼查詢）*/
+export const getIntradayQuote = async ({
+  symbol,
+}: {
+  symbol: string;
+}): Promise<IntradayQuote> => {
+  const res = await FugleApi(`/intraday/quote/${symbol}`, {
+    method: "GET",
+  });
 
   return res;
 };

@@ -1,14 +1,10 @@
 "use client";
 
 import React from "react";
+import SearchInput from "../Header/SearchInput";
 
-interface ISingleEmptyProps {
-  openDocumentToast: () => void;
-}
-
-const SingleEmpty = ({ openDocumentToast }: ISingleEmptyProps) => {
+const SingleEmpty = () => {
   const handleSearchClick = () => {
-    openDocumentToast();
     const element = document.getElementById("stock-search-input");
     if (element) {
       element.focus();
