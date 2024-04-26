@@ -16,7 +16,7 @@ interface CardDataStatsProps {
   symbol: string;
   option?: {
     openInterval?: boolean;
-    hideAction?: boolean;
+    showAction?: boolean;
   };
 }
 
@@ -41,6 +41,8 @@ const CardDataStats: React.FC<CardDataStatsProps> = ({
 
   const [candlesNotificationSession, setCandlesNotificationSession] =
     useSessionStorage("candlesNotification", {});
+
+  const [lineTokenSession] = useSessionStorage("line-token", { lineToken: "" });
 
   const { onRemoveStalkerStocks } = useStalkerStocksLocalStorage();
 
@@ -85,7 +87,7 @@ const CardDataStats: React.FC<CardDataStatsProps> = ({
 
   const onLineNotify = async (text: string) => {
     try {
-      postLineNotify(text);
+      postLineNotify(lineTokenSession.lineToken, text);
     } catch (e) {
       console.log(e);
     }
@@ -136,16 +138,9 @@ const CardDataStats: React.FC<CardDataStatsProps> = ({
       target="_blank"
       rel="noreferrer noopener nofollow"
     >
-      <div className="relative m-8 rounded-md border border-stroke bg-white px-7 py-6 shadow-default transition duration-300 ease-in-out dark:border-strokedark dark:bg-boxdark">
+      <div className="relative m-4 rounded-md border border-stroke bg-white px-4 py-3 shadow-default transition duration-300 ease-in-out dark:border-strokedark dark:bg-boxdark">
         {option?.openInterval && isMarketOpen && (
-          <span
-            className="absolute right-5 flex h-3 w-3 items-center justify-center self-end"
-            onClick={(e) => {
-              e.stopPropagation();
-              e.preventDefault();
-              onLineNotify(`🚨 ${title}(${symbol}) 通知測試`);
-            }}
-          >
+          <span className="absolute right-5 flex h-3 w-3 items-center justify-center self-end">
             <span
               className={`rounded-ful absolute inline-flex h-full w-full animate-ping opacity-0
            ${isGoldCross ? "bg-rose-400" : "bg-yellow-400"}
@@ -161,7 +156,7 @@ const CardDataStats: React.FC<CardDataStatsProps> = ({
 
         <div className="flex items-end justify-between">
           <div className="flex">
-            {option?.hideAction !== false && (
+            {option?.showAction && (
               <span
                 className="cursor-pointer"
                 onClick={(e) => {
@@ -195,7 +190,13 @@ const CardDataStats: React.FC<CardDataStatsProps> = ({
             </div>
           </div>
 
-          <div>
+          <div
+            onClick={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+              onLineNotify(`🚨 ${title}(${symbol}) 通知測試`);
+            }}
+          >
             <span
               className={`text-xl ${levelUp ? "text-meta-1" : "text-meta-3"}  `}
             >

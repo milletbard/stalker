@@ -1,13 +1,19 @@
 "use client";
 
 import React from "react";
-import SearchInput from "../Header/SearchInput";
+import { useMediaQuery } from "usehooks-ts";
 
 const SingleEmpty = () => {
+  const isDesktop = useMediaQuery("(min-width: 640px)");
+
   const handleSearchClick = () => {
     const element = document.getElementById("stock-search-input");
-    if (element) {
-      element.focus();
+    const elementMobile = document.getElementById("stock-search-input-mobile");
+
+    if (isDesktop) {
+      element?.focus();
+    } else {
+      elementMobile?.focus();
     }
   };
 
