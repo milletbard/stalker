@@ -1,12 +1,11 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React from "react";
 import { ISnapshotMover } from "@/types/fugle";
 import MoversTable from "../Movers/MoversTable";
 import Link from "next/link";
 import CardDataStats from "../CardDataStats";
-import { toast } from "react-toastify";
-import { useSessionStorage } from "usehooks-ts";
+
 import useStalkerStocksToastEffect from "@/hooks/useStalkerStocksToastEffect";
 
 interface IECommerceProps {
