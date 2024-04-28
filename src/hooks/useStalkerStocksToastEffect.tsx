@@ -115,7 +115,8 @@ const useStalkerStocksToastEffect = () => {
                       closeButton: false,
                       onClick: () => {
                         toast.dismiss();
-                        setStalkerStocksToast({ closed: true });
+                        // TODO: 關閉 toast
+                        // setStalkerStocksToast({ closed: true });
                       },
                     },
                   );
