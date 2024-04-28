@@ -8,6 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { Flip, ToastContainer } from "react-toastify";
 import React, { Suspense, useEffect, useState } from "react";
 import Loader from "@/components/common/Loader";
+import NextTopLoader from "nextjs-toploader";
 
 export default function RootLayout({
   children,
@@ -23,6 +24,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body suppressHydrationWarning={true}>
+        <NextTopLoader color="#aeb7c0" />
         <div className="h-[100vh] dark:bg-boxdark-2 dark:text-bodydark">
           <ToastContainer
             theme="light"
