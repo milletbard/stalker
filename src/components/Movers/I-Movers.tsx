@@ -1,10 +1,10 @@
 "use client";
 
 import useInView from "@/hooks/useInView";
-import { IFugleResponse, ISnapshotMover } from "@/types/fugle";
+import { ISnapshotMover } from "@/types/fugle";
 import React, { useEffect, useState } from "react";
 import MoversTable from "./MoversTable";
-import Link from "next/link";
+
 import { useLocalStorage } from "usehooks-ts";
 import { getSnapshotMovers } from "@/service/fugle";
 import { useQuery } from "@tanstack/react-query";

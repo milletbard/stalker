@@ -37,7 +37,7 @@ export const getSnapshotMovers = async ({
     { method: "GET" },
   );
 
-  return { ...res };
+  return res;
 };
 
 /** 取得股票行情快照（依市場別）*/

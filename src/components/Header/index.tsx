@@ -3,7 +3,6 @@ import DarkModeSwitcher from "./DarkModeSwitcher";
 import DropdownNotification from "./DropdownNotification";
 import DropdownMenu from "./DropdownMenu";
 import SearchInput from "./SearchInput";
-import DropdownUser from "./DropdownUser";
 
 const Header = (props: {
   sidebarOpen: string | boolean | undefined;
@@ -35,17 +34,11 @@ const Header = (props: {
               </Link>
             </li>
             <DropdownMenu />
-            {/* <!-- Notification Menu Area --> */}
 
             <DropdownNotification />
-            {/* <!-- Notification Menu Area --> */}
-            {/* <!-- Chat Notification Area --> */}
-            {/* <DropdownMessage /> */}
-            {/* <!-- Chat Notification Area --> */}
 
-            {/* <!-- Dark Mode Toggler --> */}
             <DarkModeSwitcher />
-            {/* <!-- Dark Mode Toggler --> */}
+
             <a
               href="https://github.com/milletbard"
               rel="noreferrer noopener nofollow"
@@ -65,10 +58,6 @@ const Header = (props: {
               </svg>
             </a>
           </ul>
-
-          {/* <!-- User Area --> */}
-          {/* <DropdownUser /> */}
-          {/* <!-- User Area --> */}
         </div>
       </div>
     </header>

@@ -8,8 +8,10 @@ export const metadata: Metadata = {
   description: "stalker dashboard",
 };
 
+export const revalidate = 0;
+
 export default async function Home() {
-  const snapshotMovers = await getSnapshotMovers();
+  const snapshotMovers = await getSnapshotMovers({ direction: "up" });
 
   return (
     <>
