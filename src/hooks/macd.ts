@@ -1,5 +1,4 @@
 /**
- *
  * @param data 新到舊的收盤列表
  * @param period 週期
  * 起始點:將n日間的收盤價的合計除以n算出平均值，作為第一日的EMA。
@@ -37,10 +36,10 @@ export const ema = (data: number[], period: number) => {
 };
 
 /**
- * Calculates the Moving Average Convergence Divergence (MACD) values.
- * @param ema12Array - An array of 12-day Exponential Moving Average (EMA) values.
- * @param ema26Array - An array of 26-day Exponential Moving Average (EMA) values.
- * @returns An object containing the MACD values.
+  計算 MACD
+ * @param ema12Array 
+ * @param ema26Array
+ * @returns
  */
 export const macd = ({
   ema12Array,

@@ -5,7 +5,6 @@ import { ISnapshotMover } from "@/types/fugle";
 import MoversTable from "../Movers/MoversTable";
 import Link from "next/link";
 import CardDataStats from "../CardDataStats";
-
 import useStalkerStocksToastEffect from "@/hooks/useStalkerStocksToastEffect";
 
 interface IECommerceProps {
